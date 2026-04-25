@@ -1,0 +1,360 @@
+%===----------------- subsection Covering a Graph with Clubs ----------------====
+\subsection{Phát biểu bài toán <<<< THAY BẰNG PHÁT BIỂU TỔNG QUÁT HOẶC PHÁT BIỂU RIÊNG TỪNG BÀI}
+Cho đơn đồ thị vô hướng $G=(V, E)$ với tập đỉnh $V$, tập cạnh $E$. Mỗi tập đỉnh $S \subseteq V$, ký hiệu $G[S]$ là đồ thị con cảm sinh bởi tập $S$. Cho hai đỉnh $u,v \in V$, khoảng cách giữa $u$ và $v$ trên đồ thị $G$, ký hiệu bởi $d_G (u,v)$ là số cạnh trên đường ngắn nhất nối từ $u$ tới $v$.
+
+Định nghĩa 1 (đường kính của đồ thị).
+
+Đường kính của đơn đồ thị vô hướng $G=(V, E)$ (ký hiệu diam(G)) là khoảng cách lớn nhất giữa hai đỉnh bất kỳ của tập $V$.
+
+Định nghĩa 2 (s-club)
+
+Cho đơn đồ thị vô hướng $G=(V, E)$ và tập con $U \subseteq V$, đồ thị con $G[U]$ là một s-club nếu đường kính của $G[U]$ lớn nhất là $s (diam(G[U]) \leq s)$.
+
+Định nghĩa 3 (bài toán Minimum s-club cover)
+
+Cho đơn đồ thị vô hướng $G=(V, E)$ và một số nguyên $s \geq 2$, hãy tìm tập $C={C_1,C_2,\ldots, C_h}$ nhỏ nhất sao cho với mỗi $i (1 \leq i \leq h)$ và tập $C_i \subseteq V$ thì $G[C_i]$ là một s-club và với mỗi đỉnh $v\in V$, tồn tại một tập $Cj (1 \leq j \leq h)$ sao cho $v \in C_j$.
+
+Hình~\ref{fig:sClub_Definition} minh họa một lời giải của bài toán Minimum 2-club cover đối với đồ thị có 9 đỉnh gồm hai club: $C_1 = \{1, 2, 3, 4, 5\}$, $C_2 = \{5, 6, 7, 8, 9\}$.
+
+
+\setlength{\intextsep}{0pt}
+\renewcommand{\scalefigure}{0.6}
+\noindent
+\begin{figure}[h!]
+	\centering
+	\includegraphics[scale=\scalefigure]{Pictures/sClub_cover/Definition_1.png}
+%	\begin{subfigure}{.48\linewidth}
+%		\centering
+%		\includegraphics[scale=\scalefigure]{Pictures/pic2a.png}
+%		\caption{}
+%		\label{fig:giando_a}
+%	\end{subfigure}   
+%	\begin{subfigure}{.48\linewidth}
+%		\centering
+%		\includegraphics[scale=\scalefigure]{Pictures/pic2b.png}
+%		\caption{}
+%		\label{fig:giando_b}
+%	\end{subfigure}
+	\caption{Lời giải bài toán Minimum s-club cover}
+	\label{fig:sClub_Definition}
+\end{figure}
+
+
+%===----------------- subsection Covering a Graph with Clubs ----------------====
+\subsection{Covering a Graph with Clubs~\cite{dondi2019covering}}
+Nghiên cứu [cite: 19] tiếp cận bài toán phân cụm theo hướng bảo toàn cấu trúc đồ thị, thông qua mô hình bao phủ toàn cục thay vì các thao tác chỉnh sửa mang tính phá hủy như xóa đỉnh [cite: 15], [cite: 16] hay xóa cạnh [cite: 18]. Mục tiêu của bài toán là tìm một tập tối thiểu các cụm s-club sao cho mọi đỉnh trong đồ thị đều được bao phủ.
+
+Điểm cốt lõi trong mô hình hóa nằm ở việc cho phép các cụm chồng lấp lên nhau. Một đỉnh có thể đồng thời thuộc nhiều cụm khác nhau, phản ánh đúng đặc tính của các mạng thực tế, nơi một thực thể có thể tham gia vào nhiều cộng đồng.
+
+Mặc dù trong nghiên cứu~\cite{dondi2019covering}, các tác giả đã đề xuất thuật toán gần đúng Club-Cover-Approx (ký hiệu CCA) tìm được lời giải bài toán Minimum 2-club cover với hệ số $2|V|^{1/2}\log^{3/2}|V|$, trong đó $V$ là tập đỉnh của đồ thị, $|V|$ là số đỉnh của tập $V$. Tại mỗi bước, thuật toán CCA sẽ tìm một 2-club là tập lớn nhất các đỉnh được chọn. Mặc dù thuật toán CCA có ưu điểm về thời gian thực hiện và đơn giản về ý tưởng lẫn cài đặt thuật toán, tuy nhiên do dựa trên chiến lược tham lam và chất lượng lời giải phụ thuộc nhiều vào bậc của các đỉnh của đồ thị đầu vào nên chất lượng lời giải mà thuật toán chưa thực sự tốt. Bên cạnh đó, thuật toán CCA chỉ giải bài toán Minimum 2-club cover, không áp dụng để giải được các bài toán Minimum s-club cover với $s > 2$.
+
+>>>>>>>>>>>>>>>>>> THÊM MÔ TẢ VỀ CÁC BƯỚC THUẬT TOÁN
+
+
+Thuật toán này được thiết kế để tìm một tập hợp các $2$-club bao phủ toàn bộ các đỉnh của đồ thị $G = (V, E)$ với số lượng club ít nhất có thể.
+
+
+Thuật toán hoạt động thông qua một vòng lặp liên tục cho đến khi tất cả các đỉnh đều được bao phủ:
+
+\begin{itemize}
+    \item {Bước 1: Khởi tạo (Initialization):}
+    
+    Thiết lập tập hợp các đỉnh chưa được bao phủ:
+    \[
+    V' = V
+    \]
+    
+    Khởi tạo tập lời giải rỗng:
+    \[
+    \mathcal{S} = \emptyset
+    \]
+
+    \item {Bước 2: Lựa chọn tham lam (Greedy Choice):}
+    
+    Trong mỗi vòng lặp, thuật toán tìm kiếm một đỉnh $v \in V$ sao cho kích thước của tập giao giữa vùng lân cận đóng của nó và tập đỉnh chưa bao phủ là lớn nhất:
+    \[
+    |N[v] \cap V'| \rightarrow \max
+    \]
+    
+    Ở đây, $N[v]$ bao gồm đỉnh $v$ và tất cả các đỉnh kề trực tiếp với nó.
+
+    \item {Bước 3: Cập nhật lời giải (Update):}
+    
+    Thêm tập hợp các đỉnh $N[v]$ vào tập lời giải:
+    \[
+    \mathcal{S} = \mathcal{S} \cup \{N[v]\}
+    \]
+    
+    Loại bỏ các đỉnh đã được bao phủ bởi $N[v]$ ra khỏi tập:
+    \[
+    V' = V' \setminus N[v]
+    \]
+
+    \item {Bước 4: Điều kiện dừng (Termination):}
+    
+    Nếu $V' \neq \emptyset$, quay lại Bước 2.
+    
+    Nếu $V' = \emptyset$, trả về tập $\mathcal{S}$ là tập hợp các $2$-club bao phủ đồ thị.
+\end{itemize}
+
+
+
+
+
+\subsubsection{Ưu điểm}
+Phương pháp thể hiện khả năng mô hình hóa tốt các đặc tính của mạng thực tế thông qua việc cho phép chồng lấp giữa các cụm. Ràng buộc bao phủ với điều kiện lớn hơn hoặc bằng một đóng vai trò như cơ chế logic trung tâm để biểu diễn các đỉnh cầu nối mà không cần thực hiện các thao tác chỉnh sửa cấu trúc đồ thị.
+
+Ngoài ra, việc kết hợp chiến lược tham lam với bước cắt tỉa giúp cải thiện hiệu quả sử dụng bộ nhớ. Ngay cả khi nghiệm ban đầu chứa các cụm dư thừa, hệ thống vẫn có khả năng loại bỏ các phần tử không cần thiết để giảm kích thước lớp phủ cuối cùng.
+
+
+\subsubsection{Nhược điểm}
+Phương pháp phụ thuộc nhiều vào bước tạo các s-club cực đại. Tại bước này, số lượng s-club có thể tăng theo cấp số mũ khi đồ thị là đồ thị dày hoặc khi giá trị tham số s lớn.
+
+Bên cạnh đó, việc sử dụng thuật toán tham lam có thể dẫn tới việc làm suy giảm chất lượng nghiệm. Chiến lược ưu tiên các s-club lớn trong giai đoạn đầu có thể dẫn đến việc bỏ sót các đỉnh ở lân cận, buộc phải chọn các s-club có số lượng đỉnh ít ở giai đoạn cuối. Hệ quả là số lược các s-club để phủ hết các đỉnh có thể lớn hơn đáng kể so với lời giải tối ưu.
+
+
+%===----------------- subsection Covering a Graph with Clubs ----------------====
+\subsection{Thuật toán gần đúng dựa trên phương thức khởi tạo lời giải nhiều lần giải bài toán minimum s-club cover~\cite{thanh2023}}
+
+Trong nghiên cứu~\cite{thanh2023}, các tác giả đã đề xuất thuật toán dựa trên phương pháp khởi tạo lời giải nhiều lần sử dụng chiến lược tham lam để tìm club tốt nhất tại mỗi bước. Nghiên cứu cũng đề xuất phương pháp tạo lân cận của lời giải đang xét được tạo bằng cách di chuyển một đỉnh sang một club khác. Để so sánh các cá thể, đề xuất định nghĩa hàm đánh giá cá thể khác hàm mục tiêu của bài toán Minimum s-club cover để so sánh các lân cận của lời giải đang xét dựa trên tổng số club của lời giải và tỉ số giữa số đỉnh của club có số lượng đỉnh nhỏ nhất chia cho số đỉnh của đồ thị đầu vào. Thuật toán được đề xuất gồm các bước chính sau:
+\begin{itemize}
+	\item Bước 1: Sử dụng thuật toán CCA để khởi tạo lời giải của bài toán Minimum s-club cover, lời giải này được đặt là lời giải hiện thời.
+	\item Bước 2: Lặp lại các bước sau:
+	\begin{itemize}
+		\item Bước 2.1. Tạo danh sách các lân cận tốt nhất của lời giải hiện thời (mô tả chi tiết trong phần 2.3). Nếu không tìm được lân cận nào tốt hơn lời giải hiện thời thì thoát khỏi vòng lặp.
+		
+		\item Bước 2.2. Chọn ngẫu nhiên một trong các lời giải từ Bước 2.1 đặt làm lời giải hiện thời.
+		
+		\item Bước 2.3. Nếu sau một số lần xác định trước lời giải tốt nhất tìm được không được cải thiện thì thoát khỏi vòng lặp.
+	\end{itemize}
+\end{itemize}
+
+>>>> THÊM HẠN CHẾ CỦA ĐỀ XUẤT
+
+
+\subsubsection{Ưu điểm}
+
+    Thuật toán giải quyết được bài toán Minimum $s$-club cover cho trường hợp tổng quát $s \ge 2$, khắc phục trực tiếp hạn chế của thuật toán CCA tiền nhiệm vốn chỉ áp dụng được cho $s=2$.
+    
+    Bằng cách áp dụng phương thức đa khởi tạo (MSM) kết hợp với chiến lược tham lam trong việc tạo lân cận, thuật toán I-MSM cho kết quả tốt hơn CCA trên $1/3$ bộ dữ liệu thử nghiệm từ thư viện DIMACS và bằng nhau trên $2/3$ bộ còn lại.
+    
+    Tối ưu hóa hàm đánh giá: Nghiên cứu đề xuất hàm đánh giá mới:
+    \[
+    f(sol) = num\_club + \frac{min\_vertex}{|V|}
+    \]
+    Công thức này giúp thuật toán ưu tiên các lời giải có club nhỏ chứa ít đỉnh hơn, từ đó tăng khả năng chuyển các đỉnh này sang club khác để nhanh chóng giảm số lượng club.
+
+\subsubsection{Nhược điểm}
+
+    Thuật toán vẫn phải gọi CCA để khởi tạo lời giải hiện thời. Do CCA là thuật toán tham lam, chất lượng lời giải gốc chưa thực sự tốt và vẫn bị phụ thuộc vào đồ thị đầu vào.
+    
+    Khi xét club để chuyển đỉnh, thuật toán đánh giá chi phí bằng chính số lượng đỉnh của club đó ($cost_{cl} = |cl|$). Cơ chế này dẫn tới việc luôn ưu tiên lựa chọn các club đã có sẵn kích thước lớn, dễ làm giảm tính đa dạng trong không gian tìm kiếm lân cận.
+    
+    Việc sinh lân cận yêu cầu tính toán lại đường kính của đồ thị con cảm sinh liên tục để kiểm tra điều kiện $radius < s$. Với cấu hình thử nghiệm lên tới $50{,}000$ lần đánh giá, thuật toán tiêu tốn nhiều tài nguyên tính toán.
+    
+    I-MSM chưa đảm bảo nghiệm tối ưu toàn cục. Hướng phát triển tiếp theo bắt buộc phải kết hợp với các thuật toán dựa trên quần thể để cải thiện triệt để chất lượng lời giải.
+
+
+
+
+
+
+
+
+%===----------------- subsection Covering a Graph with Clubs ----------------====
+\subsection{Áp dụng thuật toán di truyền nhóm giải bài toán minimum s-club cover~\cite{}}
+
+Thuật toán di truyền nhóm (Grouping Genetic Algorithm - GGA) được đề xuất áp dụng vào giải bài toán Minimum s-club cover problem. Nghiên cứu tập trung vào các xây dựng toán tử tiến hoá và phương pháp đánh giá lời giải bài toán Minimum s-club cover.
+
+Nghiên cứu sử dụng toán tử lai ghép gồm 6 bước được cải tiến từ toán tử lai ghép Falkenauer~\cite{falkenauer1994new} bằng cách sử dụng phương pháp chọn ngẫu nhiên các club để gán cho các gen chưa có giá trị. Toán tử lai ghép được đề xuất đảm bảo các cá thể con được tạo ra từ cá thể cha mẹ hợp lên luôn hợp lệ. Toán tử đột biến được các tác giả đề xuất dựa trên việc sử dụng ngẫu nhiên ba toán tử đột biến: Tách club, kết hợp hai club và chuyển club với tỉ lệ tương đương nhau. Các cá thể trong nghiên cứu được đánh giá thông qua đường kính của đồ thị con cảm sinh có đường kính lớn nhất.
+
+>>>> THÊM MỔ TẢ VỀ LAI GHÉP, ĐỘT BIẾN, ĐÁNH GIÁ hoặc ví dụ minh hoạ.
+
+>>>> THÊM HẠN CHẾ, ƯU ĐIỂM CỦA ĐỀ XUẤT
+
+
+
+
+%===----------------- subsection Covering a Graph with Clubs ----------------====
+\subsection{A Hybrid Multifactorial Evolutionary Algorithm for the Minimum s-Club Cover Problem~\cite{thanh2024hybrid}}
+
+Nghiên cứu đề xuất kết hợp thuật toán tìm kiếm cục bộ vào thuật toán tiến hoá đa nhân tố. Tại mỗi thế hệ, thuật toán tìm kiếm cục bộ sẽ áp dụng đối với lời giải tốt nhất của mỗi tác vụ. Thuật toán tìm cục bộ sẽ chọn ngẫu nhiên một đỉnh của đồ thị và thử chuyển đỉnh được chọn tới club khác. Nếu chất lượng lời giải không được cải thiện sau khi chuyển đỉnh thì đỉnh sẽ được đưa về club trước khi thử chuyển.
+
+
+>>>> THÊM MỔ TẢ VỀ LAI GHÉP, ĐỘT BIẾN, ĐÁNH GIÁ hoặc ví dụ minh hoạ.
+
+>>> Có thể thêm lược đồ thuật toán
+
+>>>> THÊM HẠN CHẾ, ƯU ĐIỂM CỦA ĐỀ XUẤT
+
+
+%===----------------- subsection Covering a Graph with Clubs ----------------====
+\subsection{Evolutionary multitasking algorithm based on a dynamic solution encoding strategy for the minimum s-club cover problem~\cite{thanh2025evolutionary}}
+
+Các tác giả đề xuất thuật toán tiến hóa đa nhiệm giải bài toán minimum s-club cover. Trong đó, các tác giả tập trung vào xây dựng phương pháp biểu diễn lời giải của một bài toán minimum s-club cover và biểu diễn lời giải trong không gian biểu diễn chung khi dùng thuật toán tiến hóa đa nhiệm giải nhiều bài toán minimum s-club cover. Mỗi lời giải được biểu diễn bởi hai phần tách biệt: 
+\begin{itemize}
+	\item Phần thông tin về các club: xác định số lượng club và nhãn club sử dụng để mã hóa lời giải.
+	
+	\item Phần thông tin về các đỉnh: phần này có chiều dài bằng số lượng đỉnh của đồ thị đầu vào. Mỗi giá trị sẽ xác định club mà đỉnh tương ứng thuộc về.
+\end{itemize}
+Mỗi cá thể trong không gian biểu diễn chung cũng được mã hóa gồm hai phần như đối với cá thể, trong đó, phần mã hóa club lưu trữ số club lớn nhất của lời giải các bài toán; phần thông tinh các đỉnh lưu trữ đỉnh của bài toán đầu vào có số chiều lớn nhất.
+
+Một trong những đóng góp chính của nghiên cứu là đề xuất phương pháp khởi tạo lời giải bản đầu sử dụng thuật toán tham lam ngẫu nhiên (ký hiệu: Meta-RaPS). Phương pháp sẽ lặp lại việc xác định các club có đường kính nhỏ hơn $s$ cho tới khi tất cả các đỉnh của đồ thị đầu vào được gán vào ít nhất một club. Để đảm bảo đường kính của club được tạo luôn nhỏ hơn $s$, phương pháp khởi tạo lời giải thực hiện $s-1$ lần việc thêm một đỉnh là lân cận của một trong các đỉnh đã được thêm vào club ở các bước trước đó.
+
+Trong nghiên cứu, các tác giả cũng đề xuất toán tử lai ghép gồm 6 bước chính bắt đầu bằng việc chọn ngẫu nhiên các club và các đỉnh thuộc club từ một cá thể cha mẹ. Sau đó, các đỉnh được chọn sẽ được thay thế vào các đỉnh thuộc các club tương ứng trên cá thể mẹ còn lại. Nếu sau khi thay thế vẫn còn định chưa được sử dụng thì các đỉnh này sẽ được thêm vào club mới. Nhằm tăng độ đa dạng của quần thể, nghiên cứu đề xuất toán tử đột biến gồm hai giai đoạn: giai đoạn đầu sẽ chọn chọn ngẫu nhiên một club có ít nhất hai đỉnh; giải đoạn sau sẽ chuyển ngẫu nhiên một đỉnh trong club được chọn sang club khác. Toán tử đột biến mới được kết họp với hai toán tử đột biến khác với tỉ lệ gần tương đương nhau để tạo thành toán tử đột biến sử dụng trong thuật toán tiến hóa đa nhiệm.
+
+>>> Chi tiết thêm về biểu diễn lời giải, hình ví dụ
+
+>>> CHi tiết thêm về phương pháp khởi tạo lời giải
+
+>>> Chi tiết về thuật toán đề xuất, vẽ sơ đồ.
+
+>>>> THÊM HẠN CHẾ, ƯU ĐIỂM CỦA ĐỀ XUẤT
+
+
+%===----------------- subsection Covering a Graph with Clubs ----------------====
+\subsection{New Local Search Strategy for the Minimum s-Club Cover Problem~\cite{dinh2025new}}
+
+Nghiên cứu trình bày kết hợp giữa thuật toán tiến hoá và thuật toán tìm kiếm cục bộ, trong đó tập trung vào đề xuất thuật toán tìm kiếm cục bộ dựa trên kết hợp chiến lược tham lam để xác định club và chiến lược vét cạn để chuyển một đỉnh lại club. Điểm khác biệt của thuật toán tìm kiếm cụ bộ được đề xuất là xử lý đối với club thay vì đối với đỉnh. Thuật toán thử xoá các đỉnh trên club có số đỉnh ít nhất hoặc club được chọn ngẫu nhiên từ tập các club có số lượng đỉnh nhiều hơn số club có ít đỉnh nhất một tỉ lệ cho trước. Với club được chọn, thuật toán sẽ thủ di chuyển các đỉnh có bậc 1 hoặc bậc 0 tới các club khác. Đỉnh sẽ chỉ được chuyển sang club khác nếu club sau khi thêm đỉnh được chuyển vào vẫn thoả mãn điều kiện của một s-Club.
+
+
+>>>> CÓ THỂ THÊM MÔ TẢ VỀ THUẬT TOÁN DI TRUYỀN/TIẾN HOÁ: LAI GHÉP, ĐỘT BIẾN,...
+
+>>>> THÊM HẠN CHẾ, ƯU ĐIỂM CỦA ĐỀ XUẤT
+
+
+Nghiên cứu áp dụng phương pháp mã hóa trực tiếp từ đỉnh đến cụm (vertex-to-cluster encoding). 
+Phương pháp này mang lại sự linh hoạt trong việc xử lý số lượng cụm biến đổi và giúp bảo tồn các cấu trúc có ý nghĩa trong suốt quá trình tiến hóa.
+
+\begin{itemize}
+    \item{Cấu trúc cá thể:} Mỗi nhiễm sắc thể (cá thể) được chia thành hai phân đoạn chính:
+    \begin{itemize}
+        \item {Phân đoạn câu lạc bộ (Club section):} Chứa thông tin về các nhãn của $s$-Club.
+        
+        \item{Phân đoạn đỉnh (Vertices section):} Xác định nhãn câu lạc bộ mà mỗi đỉnh được gán vào.
+    \end{itemize}
+
+    \item{Không gian tìm kiếm hợp nhất (Unified Search Space -- USS):} Chiều dài của mỗi phân đoạn trong một cá thể thuộc USS được thiết lập bằng với số chiều của nhiệm vụ lớn nhất (tức là nhiệm vụ có số đỉnh nhiều nhất).
+
+    \item{Quy trình giải mã (Decoding):} Đối với một nhiệm vụ cụ thể có kích thước $m$, thuật toán giải mã bằng cách trích xuất $m$ gen đầu tiên từ phân đoạn đỉnh của cá thể trong USS. 
+    Phân đoạn câu lạc bộ sau đó được tái thiết lập thông qua việc gán lại nhãn (relabeling) các giá trị gen, nhằm đảm bảo các nhãn câu lạc bộ được đánh số tuần tự và nhất quán.
+\end{itemize}
+>>>  hình ví dụ
+
+Ví dụ cá thể trong không gian hợp nhất (USS)
+Kích thước tối đa của USS: $D_{USS} = 10$
+\begin{verbatim}
+Phân đoạn Clubs   : | 1 | 2 | 3 |
+Phân đoạn Vertices: | 1 | 1 | 1 | 1 | 3 | 2 | 2 | 3 | 2 | 2 |
+                      ^   ^   ^   ^   ^   ^   ^   ^   ^   ^
+Đỉnh tương ứng    :   1   2   3   4   5   6   7   8   9   10
+\end{verbatim}
+Giải mã cho nhiệm vụ có 8 đỉnh
+
+Kích thước nhiệm vụ: $D_{t} = 8$
+
+Trích xuất $8$ gen đầu tiên, loại bỏ $2$ gen cuối:
+
+\begin{verbatim}
+Phân đoạn Clubs   : | 1 | 2 | 3 |
+Phân đoạn Vertices: | 1 | 1 | 1 | 1 | 3 | 2 | 2 | 3 |
+\end{verbatim}
+
+Kết quả:
+\begin{itemize}
+    \item Club 1 chứa các đỉnh: $\{1, 2, 3, 4\}$
+    \item Club 2 chứa các đỉnh: $\{6, 7\}$
+    \item Club 3 chứa các đỉnh: $\{5, 8\}$
+\end{itemize}
+
+Quá trình khởi tạo quần thể đóng vai trò nền tảng trong việc định hướng quỹ đạo tiến hóa của toàn bộ thuật toán.
+
+\begin{itemize}
+    \item {Khởi tạo ngẫu nhiên kết hợp tham lam:} Ban đầu, thuật toán sinh ra một quần thể $P(0)$ gồm các cá thể được khởi tạo ngẫu nhiên. Tuy nhiên, nhằm nâng cao chất lượng lời giải ngay từ thế hệ đầu tiên, một chiến lược tham lam (greedy strategy) được tích hợp vào quá trình khởi tạo. Cơ chế này giúp các cá thể ban đầu hình thành các cấu trúc mạng lưới tương đối phù hợp với các ràng buộc của mô hình $s$-Club, từ đó tạo tiền đề thuận lợi cho các bước tiến hóa tiếp theo.
+    
+    \item {Gán hệ số kỹ năng (Skill Factor):} Sau khi khởi tạo, mỗi cá thể trong quần thể $P(0)$ được đánh giá hiệu suất trên toàn bộ các nhiệm vụ. Dựa trên kết quả đánh giá này, mỗi cá thể được gán một hệ số kỹ năng, đại diện cho nhiệm vụ mà cá thể đó có khả năng giải quyết hiệu quả nhất. Thông tin này đóng vai trò quan trọng trong việc điều phối quá trình chuyển giao tri thức giữa các nhiệm vụ trong khuôn khổ tối ưu hóa đa nhiệm.
+\end{itemize}
+\setlength{\intextsep}{4pt}
+\setlength{\textfloatsep}{6pt}
+\setlength{\abovecaptionskip}{2pt}
+\setlength{\belowcaptionskip}{2pt}
+
+% caption nhỏ gọn
+\captionsetup{
+    font=small,
+    labelfont=bf
+}
+
+\noindent
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Pictures/sClub_cover/sd_4_7.png}
+    \caption{Sơ đồ thuật toán (Algorithm Scheme)}
+    \label{fig:sClub_Definition}
+\end{figure}
+Thuật toán EMT-G được thiết kế nhằm giải quyết thách thức trong việc tích hợp cơ chế tìm kiếm cục bộ vào khuôn khổ tiến hóa đa nhiệm. Cách tiếp cận này được triển khai thông qua một quy trình ba giai đoạn áp dụng trên các cá thể tinh hoa. Điểm khác biệt cốt lõi của phương pháp nằm ở việc thực hiện các thao tác tối ưu trực tiếp trên cấp độ cụm (club-based), thay vì trên từng đỉnh riêng lẻ.
+
+
+\begin{itemize}
+    \item {Bước 1: Khởi tạo và đánh giá}
+    
+    Khởi tạo quần thể ban đầu $P(0)$ và tiến hành gán hệ số kỹ năng cho từng cá thể dựa trên hiệu suất của chúng trên các nhiệm vụ.
+    
+    \item {Bước 2: Tiến hóa (lai ghép và đột biến)}
+    
+    Tạo ra quần thể con thông qua việc lựa chọn ngẫu nhiên các cá thể cha mẹ, sau đó thực hiện lai ghép chéo (crossover) trên phân đoạn câu lạc bộ và áp dụng các toán tử đột biến (move, split, merge). Đối với các đỉnh chưa được phân bổ, thuật toán sử dụng chiến lược tham lam để chèn chúng vào các câu lạc bộ ưu tiên theo thứ tự kích thước tăng dần.
+    
+    \item {Bước 3: Trích xuất cá thể tinh hoa}
+    
+    Tại mỗi thế hệ, đối với từng nhiệm vụ, thuật toán lựa chọn cá thể có hiệu suất tốt nhất từ quần thể kết hợp (bao gồm cả cá thể cha và cá thể con).
+    
+    \item {Bước 4: Giải mã (Decoding)}
+    
+    Cá thể tinh hoa được giải mã từ không gian tìm kiếm hợp nhất (USS) nhằm thu được biểu diễn lời giải cụ thể tương ứng với từng nhiệm vụ, ký hiệu là $sol_{tsk}$.
+    
+    \item {Bước 5: Tìm kiếm cục bộ (Local Search -- tham lam và vét cạn)}
+    
+    Thuật toán áp dụng cơ chế tìm kiếm cục bộ lên lời giải vừa được giải mã, bao gồm các bước sau:
+    \begin{itemize}
+        \item Áp dụng chiến lược tham lam ngẫu nhiên (random greedy) để ưu tiên lựa chọn các câu lạc bộ có số lượng đỉnh lớn.
+        
+        \item Thực hiện chuyển đổi tuần tự các đỉnh từ câu lạc bộ đã chọn sang các câu lạc bộ khác. Trong đó, các đỉnh có bậc (degree) bằng $1$ (hoặc $0$) được ưu tiên xử lý, do việc loại bỏ chúng không làm vi phạm ràng buộc $s$-Club của câu lạc bộ ban đầu.
+        
+        \item Áp dụng chiến lược vét cạn (exhaustive strategy) để kiểm tra tính hợp lệ của câu lạc bộ đích, nhằm đảm bảo duy trì điều kiện về đường kính tối đa không vượt quá $s$.
+    \end{itemize}
+    
+    \item {Bước 6: Cập nhật ngược và chọn lọc}
+    
+    Lời giải sau khi được cải thiện thông qua tìm kiếm cục bộ sẽ được ánh xạ ngược trở lại cá thể tương ứng trong không gian USS. Cuối cùng, cơ chế chọn lọc tự nhiên được áp dụng nhằm duy trì các cá thể có chất lượng tốt nhất cho thế hệ kế tiếp.
+\end{itemize}
+
+
+
+\subsubsection{Ưu điểm}
+    Khác với các thuật toán tìm kiếm cục bộ truyền thống chủ yếu thao tác trên từng đỉnh (vertex-based), phương pháp này thực hiện can thiệp trực tiếp ở cấp độ tập hợp (club-based). 
+    Cách tiếp cận này giúp giảm đáng kể chi phí tính toán, do hạn chế việc khám phá không gian tìm kiếm kém hiệu quả trên các đỉnh riêng lẻ không có tiềm năng cải thiện lời giải.
+
+    EMT-G cho thấy hiệu năng vượt trội so với thuật toán di truyền cơ bản (GA), với kết quả thực nghiệm cho thấy tốt hơn trong 7 trường hợp, tương đương trong 13 trường hợp và không có trường hợp nào kém hơn. 
+    Đặc biệt, phương pháp này vượt trội rõ rệt so với các thuật toán SALO và EMT-DSE khi áp dụng trên các đồ thị có mật độ lớn hơn $0.16$ và $0.09$, tương ứng.
+
+    Cơ chế lựa chọn club dựa trên chiến lược tham lam ngẫu nhiên cho phép duy trì tính đa dạng của không gian tìm kiếm (exploration). 
+    Đồng thời, kỹ thuật chuyển đỉnh dựa trên chiến lược vét cạn (exhaustive search) giúp tăng cường khả năng hội tụ nhanh tới các nghiệm chất lượng cao (exploitation). 
+    Sự kết hợp này tạo nên một cơ chế cân bằng hiệu quả giữa hai quá trình khai phá và khai thác trong tối ưu hóa.
+
+\subsubsection{Nhược điểm}
+Khi so sánh với phương pháp heuristic chuyên biệt SALO, hiệu năng của EMT-G không hoàn toàn áp đảo. Cụ thể, EMT-G cho kết quả kém hơn SALO ở 3 bộ dữ liệu. Đặc biệt, trên các đồ thị có tổng số đỉnh dưới hoặc mật độ đồ thị thấp, SALO cho thấy khả năng cạnh tranh rất mạnh mẽ.
+
+Mặc dù đã tối ưu hóa, quá trình rút và ghép đỉnh giữa các club vẫn đòi hỏi phải tính toán lại liên tục để đảm bảo không vi phạm ràng buộc giới hạn đường kính của s-Club. Chính nhóm tác giả cũng đặt ra mục tiêu trong tương lai phải làm giảm chi phí tính toán cho quá trình xác minh các club hợp lệ này.
+
+
+%===----------------- subsection Covering a Graph with Clubs ----------------====
+\subsection{Disjoint covering of bipartite graphs with s-clubs~\cite{monti2025disjoint}}
+NGHIÊN CỨU NÀY CHƯA CHÍNH THỨC ĐƯỢC XUẤT BẢN
+
+
+%===----------------- subsection Covering a Graph with Clubs ----------------====
+\subsection{Exact algorithms for the minimum s-club partitioning problem~\cite{yezerska2019exact}}
+
+
+
+

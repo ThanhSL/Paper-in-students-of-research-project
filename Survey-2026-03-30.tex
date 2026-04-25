@@ -1,0 +1,150 @@
+\documentclass[red]{TBUJournal}
+
+%===----------------- CÁC GÓI LỆNH -------------------====
+\usepackage{algorithm2e}
+\usepackage{booktabs}
+\usepackage{lineno}
+\usepackage{tocloft,calc}
+\usepackage{makeidx}
+
+\newcommand{\scalefigure}{0.20}
+\newcommand{\nothanks}{\protect\stepcounter{footnote}}
+
+%===-------------- Title of the paper --------------------====
+\title{TITLE OF THE PAPER IN ENGLISH. BE CONCISE, SPECIFIC AND RELEVANT. CAPITAL, BOLD, TIMES NEW ROMAN, SIZE 12}
+\author[1]{Full name of author 1\thanks{Corresponding author: abc@xyz.com}}
+\author[1]{Full name of author 2}
+\author[2]{Full name of author 3}
+%\author[1]{Full name of author 4}
+\affil[1]{Affiliation for author 1}
+\affil[2]{Affiliation for author 2}
+
+
+\begin{document}
+\pagestyle{tbuPageStyle}
+
+\maketitle
+
+%===------------------- ARTICLE INFO - KEYWORDS -----------------------====
+\hrule
+{\vskip 5pt}   
+\noindent
+\begin{minipage}[t]{0.39\textwidth} 
+	\centerline{\fontsize{10}{10}\selectfont \textbf{ARTICLE INFO}}
+	{\vskip 5pt}  
+	\hrule
+	{\vskip 6pt}  
+	\begin{tabular}{rl}	
+		\vspace{3pt}
+		{\fontsize{9}{9}\selectfont \textbf{Received:}}	& {\fontsize{9}{9}\selectfont 26/10/2023}\\
+		\vspace{3pt}
+		{\fontsize{9}{9}\selectfont \textbf{Revised:}} & {\fontsize{9}{9}\selectfont 27/10/2023}\\
+		\vspace{3pt}
+		{\fontsize{9}{9}\selectfont \textbf{Published:}} & {\fontsize{9}{9}\selectfont 28/10/2023}\\	
+	\end{tabular}
+	\centerline{\fontsize{10}{10}\selectfont \textbf{KEYWORDS}}
+	{\vskip 6pt}  
+	\hrule
+	{\vskip 3pt}  
+	\keywords{Keyword 1, Keyword 2, Keyword 3, Keyword 4, Keyword 5} 
+\end{minipage}
+\hspace{8pt}%
+\begin{minipage}[t]{0.6\textwidth}
+	\centerline{\fontsize{10}{10} \textbf{ABSTRACT}}
+	\noindent
+	\begin{abstract}
+		Trình bày tóm tắt bằng tiếng Anh. Nội dung khớp với tóm tắt tiếng Việt.		
+	\end{abstract}
+\end{minipage}
+
+\begin{center}
+	\fontsize{12}{14}\selectfont
+	\textbf{TÊN BÀI BÁO BẰNG TIẾNG VIỆT. CẦN NGẮN GỌN, CHÍNH XÁC VÀ RIÊNG BIỆT. FONT TIME NEW ROMAN CỠ 12, IN ĐẬM}
+\end{center}
+
+\begin{flushleft}
+	\textbf{\fontsize{10}{10}\selectfont Tên tác giả  1$^{*1}$, Tên tác giả 2$^1$, Tên tác giả  3$^2$}\\
+	\textit{\fontsize{9}{9}\selectfont $^1$Đơn vị công tác của tác giả 1, 2, 4\\ $^2$Đơn vị công tác của tác giả 2}
+\end{flushleft}
+\vspace{6pt}
+
+%===------------------- THÔNG TIN BÀI BÁO - TÓM TẮT -----------------------====
+\hrule
+{\vskip 1pt}   
+\noindent
+\begin{minipage}[t]{0.39\textwidth} 
+\centerline{\fontsize{10}{10}\selectfont \textbf{THÔNG TIN BÀI BÁO}}
+{\vskip 5pt}  
+\hrule
+{\vskip 3pt}  
+	\begin{tabular}{rl}	
+	\vspace{3pt}
+	\textbf{\fontsize{9}{9}\selectfont Ngày nhận bài:}	& {\fontsize{9}{9}\selectfont 26/10/2023}\\
+	\vspace{3pt}	
+	\textbf{\fontsize{9}{9}\selectfont Ngày hoàn thiện:} & {\fontsize{9}{9}\selectfont 27/10/2023}\\
+	\vspace{3pt}
+	\textbf{\fontsize{9}{9}\selectfont Ngày đăng:}	& {\fontsize{9}{9}\selectfont 28/10/2023}\\	
+	\end{tabular}
+\centerline{\fontsize{10}{10}\selectfont \textbf{TỪ KHÓA}}
+{\vskip 3pt}  
+\hrule
+{\vskip 3pt}  
+\keywords{Từ khoá 1, Từ khoá 2, Từ khoá 3, Từ khoá 4, Từ khoá 5} 
+\end{minipage}
+\hspace{8pt}%
+\begin{minipage}[t]{0.6\textwidth}
+	\centerline{\fontsize{10}{10}\selectfont \textbf{TÓM TẮT}}
+	\noindent
+	\begin{abstract}
+		Phần tóm tắt trình bày thành một đoạn văn, độ dài nằm trong khoảng 150-200 từ, không viết tắt, không chèn chú thích và tham chiếu tài liệu tham khảo (Nếu cần trích dẫn nguồn, ghi tên tác giả và năm ở trong ngoặc đơn). Nội dung tóm tắt cần bao gồm bốn ý sau: 1) Câu hỏi và mục đích của nghiên cứu. 2) Phương pháp nghiên cứu. Cần mô tả cách thức giải quyết vấn đề (phát triển lý thuyết/ phương pháp thu thập, xử lý dữ liệu…); 3)	Kết quả. Tóm tắt những kết quả chính của nghiên cứu, kể cả những số liệu có thể lấy làm điểm thiết yếu của nghiên cứu. 4) Kết luận. Một hoặc 2 câu văn kết luận và ý nghĩa của kết quả nghiên cứu. 
+		Nội dung tóm tắt cần cung cấp thông tin một cách ngắn gọn, nhưng có dữ liệu minh chứng và đi thẳng vào vấn đề. 
+	
+		Lưu ý: hạn chế gõ công thức được định dạng trong tóm tắt, sẽ không hiển thị đúng trên các trang web.		
+	\end{abstract}
+\end{minipage}
+
+\fontsize{11}{11}\selectfont
+
+%===------------------ Introduction ---------------------====
+\section{Maximal k-cliques}
+\label{sec:introduction}
+\input{Sections/Sec_Introduction}
+
+%===----------------- Proposed algorithm ----------------====
+\section{Lớp bài toán phủ đồ thị bởi s-club}
+\label{sec:proposedAlgorithm}
+\input{Sections/Sec_s_club_covering}
+
+%===---------------------- Results ----------------------====
+\section{Kết quả và bàn luận}
+\label{sec:results}
+%\input{Sections/Sec_Results}
+
+
+%===--------------------- Conclusion ---------------------====
+\section{Kết luận}
+\label{sec:conclusion}
+%\input{Sections/Sec_Conclusion}
+%
+
+%===------------------- Acknowledgements -----------------====
+\section*{Lời cám ơn} 
+\label{Acknowledgment}
+%\input{Sections/Sec_Acknowledgment}	
+
+%===------------------- Acknowledgements -----------------====
+%\section*{Tài liệu tham khảo} 
+%\label{References}
+%\input{Sections/Sec_References}	
+
+
+
+%===------------------ Tai lieu tham khao ----------------====
+\setlength{\bibsep}{3pt}
+\fontsize{11}{11}\selectfont
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+
+
+\end{document}
